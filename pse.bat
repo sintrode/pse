@@ -11,12 +11,6 @@
 ::
 :: AUTHOR
 ::     Sintrode
-::
-:: VERSION HISTORY
-::     1.2 (2021-08-16) - Removed need for delayed expansion to handle filenames
-::                        that contain exclamation points
-::     1.1 (2021-08-02) - Added subfolder processing
-::     1.0 (2021-07-23) - Initial Version
 ::------------------------------------------------------------------------------
 @echo off
 
