@@ -33,7 +33,7 @@ pushd "%input_folder%"
 set "counter=-1"
 for /f "delims=" %%A in ('dir /b /s /a:-d') do (
 	set /a counter+=1
-	call set "filename[%%counter%%]=%%A"
+	call set filename[%%counter%%]="%%~A"
 )
 set /a total_count=counter, processed_count=-1
 
@@ -46,12 +46,13 @@ if %running_processes% GEQ %MAX_THREADS% (
 set /a processed_count+=1
 title Processing file %processed_count%/%total_count%
 
-call set "actual_filename=%%filename[%processed_count%]%%"
-for /f "delims=" %%A in ("%processed_count%") do (
-	start "pse_spawn" cmd /c "%target_script% ^"%actual_filename%^""
-	REM Wait for a second so that two processes don't spawn at the same time
-	timeout /t 1 >nul
-)
+call set actual_filename=%%filename[%processed_count%]%%
+setlocal enabledelayedexpansion
+start "pse_spawn" cmd /c "%target_script% ^"!actual_filename:~1,-1!^""
+endlocal
+:: Wait for a second so that two processes don't spawn at the same time
+timeout /t 1 >nul
+
 if %processed_count% LSS %total_count% goto :spawn_process
 popd
 exit /b
